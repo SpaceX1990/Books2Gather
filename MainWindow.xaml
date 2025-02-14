@@ -1,16 +1,45 @@
 ﻿<Window x:Class="Books2Gather.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:Books2Gather.ViewModels"
-        Title="MVVM WPF" Height="200" Width="300">
-    <Window.DataContext>
-        <local:MainViewModel />
-    </Window.DataContext>
-    <Grid>
-        <TextBlock Text="{Binding Message}" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" 
-                   FontSize="20"/>
+        Title="Bücherverwaltung" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Suchleiste und "Neues Buch" Button -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBox Width="300" Height="30" Margin="0,0,10,0"
+                     Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Neues Buch erstellen" Width="150" Height="30"
+                    Command="{Binding AddBookCommand}"/>
+        </StackPanel>
+
+        <!-- Tabelle mit Büchern -->
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Books}" AutoGenerateColumns="False"
+                  CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+                  RowHeaderWidth="100">
+            <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <Button Content="✏️" ToolTip="Bearbeiten" Width="30"
+                                Command="{Binding DataContext.EditBookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"/>
+                        <Button Content="🗑" ToolTip="Löschen" Width="30" Background="Red" Foreground="White"
+                                Command="{Binding DataContext.DeleteBookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Titel" Binding="{Binding Title}" Width="*"/>
+                <DataGridTextColumn Header="ISBN" Binding="{Binding ISBN}" Width="150"/>
+                <DataGridTextColumn Header="Autor" Binding="{Binding Author}" Width="200"/>
+                <DataGridTextColumn Header="Veröffentlichung" Binding="{Binding PublishDate, StringFormat=yyyy-MM-dd}" Width="150"/>
+                <DataGridTextColumn Header="Genre" Binding="{Binding Genre}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
-    
