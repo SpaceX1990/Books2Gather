@@ -11,6 +11,8 @@ namespace Books2Gather.Repository
             optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Buecherei;Trusted_Connection=True;");
         }
 
+        public DbSet<Book> Books { get; set; }
         public DbSet<Author> Authors { get; set; }
+        public DbSet<Genre> Genres { get; set; }
     }
 }

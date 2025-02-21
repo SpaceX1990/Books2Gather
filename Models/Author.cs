@@ -34,5 +34,8 @@ namespace Books2Gather.Models
         {
             get { return $"{FirstName} {LastName}"; }
         }
+        
+        public List<Book> Books { get; set; } = new List<Book>();
+
     }
 }

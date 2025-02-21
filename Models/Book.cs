@@ -1,15 +1,35 @@
-﻿namespace Books2Gather.Models {
-    public class Book {
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Books2Gather.Models
+{
+    [Table("Buecher")] // Entspricht der SQL-Tabelle
+    public class Book
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("BuchID")] // Entspricht der SQL-Spalte
+        public int BookId { get; set; }
+
+        [Required]
+        [MaxLength(255)]
+        [Column("Titel")]
         public string Title { get; set; }
 
-        public List<Author> AuthorList { get; set; }
-
-        public List<Genre> GenreList { get; set; }
-
+        [Required]
+        [MaxLength(20)]
+        [Column("ISBN")]
         public string ISBN { get; set; }
 
+        [Column("Erscheinungsdatum")]
         public DateOnly PublishingDate { get; set; }
 
-        public Decimal Prize { get; set; }
+        [Column("Preis")]
+        public decimal Prize { get; set; }
+
+        public List<Author> Authors { get; set; } = new List<Author>();
+        
+        public List<Genre> Genres { get; set; } = new List<Genre>();
+
     }
 }
