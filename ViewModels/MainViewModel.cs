@@ -1,6 +1,9 @@
 ﻿using Books2Gather.Models;
+using Books2Gather.Views;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -19,6 +22,7 @@ namespace Books2Gather.ViewModels {
             }
         }
 
+        public ICommand AddBookCommand { get; }
         public ICommand EditBookCommand { get; }
         public ICommand DeleteBookCommand { get; }
 
@@ -60,7 +64,8 @@ namespace Books2Gather.ViewModels {
             FilteredBooks = CollectionViewSource.GetDefaultView(Books);
             FilteredBooks.Filter = FilterBooks;
 
-            EditBookCommand = new RelayCommand<Book>(EditBook);
+            AddBookCommand = new RelayCommand(() => OpenBookDialog(null));
+            EditBookCommand = new RelayCommand<Book>(OpenBookDialog);
             DeleteBookCommand = new RelayCommand<Book>(DeleteBook);
         }
 
@@ -78,8 +83,32 @@ namespace Books2Gather.ViewModels {
             return false;
         }
 
-        private void EditBook(Book book) {
-            throw new NotImplementedException();
+        private void OpenBookDialog(Book book) {
+            var isNew = book == null;
+            var bookToEdit = isNew ? new Book() : new Book {
+                Title = book.Title,
+                ISBN = book.ISBN,
+                AuthorList = new List<Author>(book.AuthorList),
+                GenreList = new List<Genre>(book.GenreList),
+                PublishingDate = book.PublishingDate,
+                Prize = book.Prize
+            };
+
+            var dialog = new BookDialog() {
+                DataContext = new BookDialogViewModel(bookToEdit)
+            };
+
+            if (dialog.ShowDialog() == true) {
+                if (isNew) {
+                    Books.Add(bookToEdit);
+                }
+                else {
+                    var index = Books.IndexOf(book);
+                    if (index >= 0) {
+                        Books[index] = bookToEdit;
+                    }
+                }
+            }
         }
 
         private void DeleteBook(Book book) {
