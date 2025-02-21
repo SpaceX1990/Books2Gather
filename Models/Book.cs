@@ -1,14 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Books2Gather.Models
 {
-    [Table("Buecher")] // Entspricht der SQL-Tabelle
+    [Table("Buecher")] 
     public class Book
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("BuchID")] // Entspricht der SQL-Spalte
+        [Column("BuchID")] 
         public int BookId { get; set; }
 
         [Required]
@@ -31,5 +36,8 @@ namespace Books2Gather.Models
         
         public List<Genre> Genres { get; set; } = new List<Genre>();
 
+
+        public string AuthorNames => string.Join(", ", AuthorList.Select(a => $"{a.Firstname} {a.Lastname}"));
+        public string GenreNames => string.Join(", ", GenreList.Select(g => g.Description));
     }
 }
