@@ -8,7 +8,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Suchleiste und "Neues Buch" Button -->
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
             <TextBox Width="300" Height="30" Margin="0,0,10,0"
                      Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
@@ -16,29 +15,29 @@
                     Command="{Binding AddBookCommand}"/>
         </StackPanel>
 
-        <!-- Tabelle mit Büchern -->
         <DataGrid Grid.Row="1" ItemsSource="{Binding Books}" AutoGenerateColumns="False"
-                  CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
-                  RowHeaderWidth="100">
-            <DataGrid.RowHeaderTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <Button Content="✏️" ToolTip="Bearbeiten" Width="30"
-                                Command="{Binding DataContext.EditBookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}"/>
-                        <Button Content="🗑" ToolTip="Löschen" Width="30" Background="Red" Foreground="White"
-                                Command="{Binding DataContext.DeleteBookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
-
+                  CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Titel" Binding="{Binding Title}" Width="*"/>
                 <DataGridTextColumn Header="ISBN" Binding="{Binding ISBN}" Width="150"/>
                 <DataGridTextColumn Header="Autor" Binding="{Binding Author}" Width="200"/>
                 <DataGridTextColumn Header="Veröffentlichung" Binding="{Binding PublishDate, StringFormat=yyyy-MM-dd}" Width="150"/>
                 <DataGridTextColumn Header="Genre" Binding="{Binding Genre}" Width="150"/>
+
+                <DataGridTemplateColumn Header="Aktionen" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="✏️" ToolTip="Bearbeiten" Width="30"
+                                        Command="{Binding DataContext.EditBookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}"/>
+                                <Button Content="🗑" ToolTip="Löschen" Width="30" Background="Red" Foreground="White"
+                                        Command="{Binding DataContext.DeleteBookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

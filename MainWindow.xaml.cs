@@ -1,16 +1,7 @@
-﻿using System.Text;
+﻿using Books2Gather.ViewModels;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace Books2Gather
-{
+namespace Books2Gather {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -19,6 +10,7 @@ namespace Books2Gather
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
         }
     }
 }
