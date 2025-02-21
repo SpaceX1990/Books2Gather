@@ -114,8 +114,20 @@ namespace Books2Gather.ViewModels
         }
 
         private void DeleteBook(Book book) {
-            throw new NotImplementedException();
+            if (book == null)
+                return;
+
+            var result = MessageBox.Show(
+                $"Soll das Buch \"{book.Title}\" wirklich gelöscht werden?",
+                "Löschen bestätigen",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes) {
+                Books.Remove(book);
+            }
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) {
