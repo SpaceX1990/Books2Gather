@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Books2Gather.Models
-{
+namespace Books2Gather.Models {
     [Table("Buecher")] 
     public class Book
     {
@@ -37,7 +31,7 @@ namespace Books2Gather.Models
         public List<Genre> Genres { get; set; } = new List<Genre>();
 
 
-        public string AuthorNames => string.Join(", ", AuthorList.Select(a => $"{a.Firstname} {a.Lastname}"));
-        public string GenreNames => string.Join(", ", GenreList.Select(g => g.Description));
+        public string AuthorNames => string.Join(", ", Authors.Select(a => $"{a.FirstName} {a.LastName}"));
+        public string GenreNames => string.Join(", ", Genres.Select(g => g.Description));
     }
 }
