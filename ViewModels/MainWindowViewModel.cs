@@ -40,7 +40,7 @@ internal class MainWindowViewModel : MainViewModel
     {
         var newAuthor = new Author
         {
-            FirstName = "Neuer", LastName = "Autor", BirthDate = new DateTime(2011, 3, 10), Nationality = "deutsch",
+            FirstName = "Neuer", LastName = "Autor", BirthDate = new DateOnly(2011, 3, 10), Nationality = "deutsch",
             Biography = "Bester Autor aller Zeiten"
         };
         repository.Insert(newAuthor);

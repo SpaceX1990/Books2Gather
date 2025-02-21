@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Books2Gather.Models
 {
-    [Table("Autoren")] // Entspricht der SQL-Tabelle
+    [Table("Autoren")] 
     public class Author
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("AutorID")] // Entspricht der SQL-Spalte
+        [Column("AutorID")] 
         public int AuthorId { get; set; }
 
         [Required]
         [MaxLength(50)]
-        [Column("Vorname")] // Deutsche Spaltenbezeichnung
+        [Column("Vorname")]
         public string FirstName { get; set; }
 
         [Required]
@@ -21,7 +21,7 @@ namespace Books2Gather.Models
         [Column("Nachname")]
         public string LastName { get; set; }
 
-        [Column("Geburtsdatum")] public DateTime? BirthDate { get; set; }
+        [Column("Geburtsdatum")] public DateOnly? BirthDate { get; set; }
 
         [MaxLength(50)]
         [Column("Nationalitaet")]
@@ -29,7 +29,7 @@ namespace Books2Gather.Models
 
         [Column("Biografie")] public string Biography { get; set; }
 
-        [NotMapped] // Diese Eigenschaft wird NICHT in die Datenbank geschrieben
+        [NotMapped]
         public string FullName
         {
             get { return $"{FirstName} {LastName}"; }
