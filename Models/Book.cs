@@ -30,13 +30,11 @@ namespace Books2Gather.Models
         [ForeignKey("Author")]
         [Column("AuthorId")]
         public int AuthorId { get; set; }
-
         public Author Author { get; set; }
 
         [ForeignKey("Genre")]
         [Column("GenreId")]
         public int GenreId { get; set; }
-
         public Genre Genre { get; set; }
     }
 }
