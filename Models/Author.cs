@@ -13,27 +13,27 @@ namespace Books2Gather.Models
 
         [Required]
         [MaxLength(50)]
-        [Column("Vorname")]
-        public string FirstName { get; set; }
+        [Column("Name")]
+        public string Name { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        [Column("Nachname")]
-        public string LastName { get; set; }
+        //[Required]
+        //[MaxLength(50)]
+        //[Column("Nachname")]
+        //public string LastName { get; set; }
 
-        [Column("Geburtsdatum")] public DateOnly? BirthDate { get; set; }
+        //[Column("Geburtsdatum")] public DateOnly? BirthDate { get; set; }
 
-        [MaxLength(50)]
-        [Column("Nationalitaet")]
-        public string Nationality { get; set; }
+        //[MaxLength(50)]
+        //[Column("Nationalitaet")]
+        //public string Nationality { get; set; }
 
-        [Column("Biografie")] public string Biography { get; set; }
+        //[Column("Biografie")] public string Biography { get; set; }
 
-        [NotMapped]
-        public string FullName
-        {
-            get { return $"{FirstName} {LastName}"; }
-        }
+        //[NotMapped]
+        //public string FullName
+        //{
+        //    get { return $"{FirstName} {LastName}"; }
+        //}
         
         public List<Book> Books { get; set; } = new List<Book>();
 

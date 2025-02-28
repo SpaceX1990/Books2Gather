@@ -14,6 +14,7 @@ namespace Books2Gather.ViewModels
     {
         private readonly IRepository<Book> bookRepository;
         private readonly IRepository<Author> authorRepository;
+        private readonly IRepository<Genre> genreRepository;
 
         public ObservableCollection<Book> Books { get; set; }
         public ICollectionView FilteredBooks { get; }
@@ -35,47 +36,51 @@ namespace Books2Gather.ViewModels
         public MainViewModel() {
             bookRepository = new BookRepository();
             authorRepository = new AuthorRepository();
+            genreRepository = new GenreRepository();
 
-            Books = new ObservableCollection<Book>
-            {
-                new Book
-                {
-                    Title = "Der Hobbit",
-                    ISBN = "123456789",
-                    Authors = new List<Author>
-                    {
-                        new Author { FirstName = "J.R.R.", LastName = "Tolkien", BirthDate = new DateOnly(1892, 1, 3), Biography = "Blah", Nationality = "deutsch" }
-                    },
-                    Genres = new List<Genre>
-                    {
-                        new Genre { Description = "Fantasy" }
-                    },
-                    PublishingDate = new DateOnly(1937, 9, 21),
-                    Prize = 12.99m
-                },
-                new Book
-                {
-                    Title = "1984",
-                    ISBN = "987654321",
-                    Authors = new List<Author>
-                    {
-                        new Author { FirstName = "George", LastName = "Orwell", BirthDate = new DateOnly(1903, 6, 25), Biography = "Blah", Nationality = "deutsch" }
-                    },
-                    Genres = new List<Genre>
-                    {
-                        new Genre { Description = "Dystopie" }
-                    },
-                    PublishingDate = new DateOnly(1949, 6, 8),
-                    Prize = 9.99m
-                }
-            };
+            //Books = new ObservableCollection<Book>
+            //{
+            //    new Book
+            //    {
+            //        Title = "Der Hobbit",
+            //        ISBN = "123456789",
+            //        Authors = new List<Author>
+            //        {
+            //            new Author { FirstName = "J.R.R.", LastName = "Tolkien", BirthDate = new DateOnly(1892, 1, 3), Biography = "Blah", Nationality = "deutsch" }
+            //        },
+            //        Genres = new List<Genre>
+            //        {
+            //            new Genre { Description = "Fantasy" }
+            //        },
+            //        PublishingDate = new DateOnly(1937, 9, 21),
+            //        Prize = 12.99m
+            //    },
+            //    new Book
+            //    {
+            //        Title = "1984",
+            //        ISBN = "987654321",
+            //        Authors = new List<Author>
+            //        {
+            //            new Author { FirstName = "George", LastName = "Orwell", BirthDate = new DateOnly(1903, 6, 25), Biography = "Blah", Nationality = "deutsch" }
+            //        },
+            //        Genres = new List<Genre>
+            //        {
+            //            new Genre { Description = "Dystopie" }
+            //        },
+            //        PublishingDate = new DateOnly(1949, 6, 8),
+            //        Prize = 9.99m
+            //    }
+            //};
 
-            foreach (Book book in Books) {
-                bookRepository.Insert(book);
-                foreach (Author author in book.Authors) {
-                    authorRepository.Insert(author);
-                }
-            }
+            //foreach (Book book in Books) {
+            //    bookRepository.Insert(book);
+            //    foreach (Author author in book.Authors) {
+            //        authorRepository.Insert(author);
+            //    }
+            //    foreach (Genre genre in book.Genres) {
+            //        genreRepository.Insert(genre);
+            //    }
+            //}
 
             FilteredBooks = CollectionViewSource.GetDefaultView(Books);
             FilteredBooks.Filter = FilterBooks;
@@ -127,6 +132,10 @@ namespace Books2Gather.ViewModels
             }
         }
 
+        private void CreateBook() {
+
+        }
+
         private void DeleteBook(Book book) {
             var books = bookRepository.GetAll();
             if (book == null)
@@ -146,6 +155,7 @@ namespace Books2Gather.ViewModels
 
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

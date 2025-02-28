@@ -26,12 +26,18 @@ namespace Books2Gather.Models {
         [Column("Preis")]
         public decimal Prize { get; set; }
 
-        public List<Author> Authors { get; set; } = new List<Author>();
+        [Column("AutorID")]
+        public int Author { get; set; }
+
+        [Column("GenreID")]
+        public int Genre { get; set; }
+
+        //public List<Author> Authors { get; set; } = new List<Author>();
         
-        public List<Genre> Genres { get; set; } = new List<Genre>();
+        //public List<Genre> Genres { get; set; } = new List<Genre>();
 
 
-        public string AuthorNames => string.Join(", ", Authors.Select(a => $"{a.FirstName} {a.LastName}"));
-        public string GenreNames => string.Join(", ", Genres.Select(g => g.Description));
+        //public string AuthorNames => string.Join(", ", Authors.Select(a => $"{a.FirstName} {a.LastName}"));
+        //public string GenreNames => string.Join(", ", Genres.Select(g => g.Description));
     }
 }
