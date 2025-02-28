@@ -11,7 +11,7 @@ internal class AuthorRepository : IRepository<Author>
     public AuthorRepository()
     {
         this.context = new AppDbContext();
-        dbSet = this.context.Set<Author>(); // Ermöglicht den Zugriff auf den entsprechenden DbSet
+        dbSet = this.context.Set<Author>();
     }
 
     public void Delete(Author entity)

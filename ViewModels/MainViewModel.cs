@@ -6,11 +6,15 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using Books2Gather.Repository;
 
 namespace Books2Gather.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        private readonly IRepository<Book> bookRepository;
+        private readonly IRepository<Author> authorRepository;
+
         public ObservableCollection<Book> Books { get; set; }
         public ICollectionView FilteredBooks { get; }
 
@@ -29,6 +33,9 @@ namespace Books2Gather.ViewModels
         public ICommand DeleteBookCommand { get; }
 
         public MainViewModel() {
+            bookRepository = new BookRepository();
+            authorRepository = new AuthorRepository();
+
             Books = new ObservableCollection<Book>
             {
                 new Book
@@ -37,7 +44,7 @@ namespace Books2Gather.ViewModels
                     ISBN = "123456789",
                     Authors = new List<Author>
                     {
-                        new Author { FirstName = "J.R.R.", LastName = "Tolkien", BirthDate = new DateOnly(1892, 1, 3) }
+                        new Author { FirstName = "J.R.R.", LastName = "Tolkien", BirthDate = new DateOnly(1892, 1, 3), Biography = "Blah", Nationality = "deutsch" }
                     },
                     Genres = new List<Genre>
                     {
@@ -52,7 +59,7 @@ namespace Books2Gather.ViewModels
                     ISBN = "987654321",
                     Authors = new List<Author>
                     {
-                        new Author { FirstName = "George", LastName = "Orwell", BirthDate = new DateOnly(1903, 6, 25) }
+                        new Author { FirstName = "George", LastName = "Orwell", BirthDate = new DateOnly(1903, 6, 25), Biography = "Blah", Nationality = "deutsch" }
                     },
                     Genres = new List<Genre>
                     {
@@ -62,6 +69,13 @@ namespace Books2Gather.ViewModels
                     Prize = 9.99m
                 }
             };
+
+            foreach (Book book in Books) {
+                bookRepository.Insert(book);
+                foreach (Author author in book.Authors) {
+                    authorRepository.Insert(author);
+                }
+            }
 
             FilteredBooks = CollectionViewSource.GetDefaultView(Books);
             FilteredBooks.Filter = FilterBooks;
@@ -114,6 +128,7 @@ namespace Books2Gather.ViewModels
         }
 
         private void DeleteBook(Book book) {
+            var books = bookRepository.GetAll();
             if (book == null)
                 return;
 
@@ -124,7 +139,8 @@ namespace Books2Gather.ViewModels
                 MessageBoxImage.Warning);
 
             if (result == MessageBoxResult.Yes) {
-                Books.Remove(book);
+                //Books.Remove(book);
+                bookRepository.Delete(book);
             }
         }
 
