@@ -3,40 +3,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Books2Gather.Repository;
 
-internal class AuthorRepository : IRepository<Author>
+internal class GenreRepository : IRepository<Genre>
 {
     private readonly AppDbContext context;
-    private readonly DbSet<Author> dbSet;
+    private readonly DbSet<Genre> dbSet;
 
-    public AuthorRepository()
+    public GenreRepository()
     {
         context = new AppDbContext();
-        dbSet = context.Set<Author>();
+        dbSet = context.Set<Genre>();
     }
 
-    public void Delete(Author entity)
+    public void Delete(Genre entity)
     {
         dbSet.Remove(entity);
         context.SaveChanges();
     }
 
-    public IEnumerable<Author> GetAll()
+    public IEnumerable<Genre> GetAll()
     {
         return dbSet.ToList();
     }
 
-    public Author? GetById(int id)
+    public Genre? GetById(int id)
     {
         return dbSet.Find(id);
     }
 
-    public void Insert(Author entity)
+    public void Insert(Genre entity)
     {
         dbSet.Add(entity);
         context.SaveChanges();
     }
 
-    public void Update(Author entity)
+    public void Update(Genre entity)
     {
         dbSet.Update(entity);
         context.SaveChanges();
