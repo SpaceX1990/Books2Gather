@@ -29,9 +29,9 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Titel" Binding="{Binding Title}" Width="*"/>
                 <DataGridTextColumn Header="ISBN" Binding="{Binding ISBN}" Width="150"/>
-                <DataGridTextColumn Header="Autoren" Binding="{Binding AuthorNames}" Width="200"/>
+                <DataGridTextColumn Header="Autor" Binding="{Binding AuthorFullName}" Width="200"/>
                 <DataGridTextColumn Header="Veröffentlichung" Binding="{Binding PublishingDate, StringFormat=yyyy-MM-dd}" Width="150"/>
-                <DataGridTextColumn Header="Genre" Binding="{Binding GenreNames}" Width="150"/>
+                <DataGridTextColumn Header="Genre" Binding="{Binding Genre.Description}" Width="150"/>
                 <DataGridTextColumn Header="Preis (€)" Binding="{Binding Prize, StringFormat=F2}" Width="100"/>
 
                 <DataGridTemplateColumn Header="Aktionen" Width="100">
