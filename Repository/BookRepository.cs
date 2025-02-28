@@ -19,11 +19,10 @@ namespace Books2Gather.Repository {
         public IEnumerable<Book> GetAll()
         {
             return dbSet
-                .Include(b => b.Authors)  // Lädt die Autoren mit
-                .Include(b => b.Genres)   // Lädt die Genres mit
+                .Include(b => b.Author) // Lädt den Autor mit
+                .Include(b => b.Genre)  // Lädt das Genre mit
                 .ToList();
         }
-
 
         public Book? GetById(int id) {
             return dbSet.Find(id);
