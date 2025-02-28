@@ -4,7 +4,7 @@
         Title="Buch bearbeiten" Height="400" Width="450"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
-    
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -34,11 +34,19 @@
             <TextBlock Text="ISBN:" Grid.Row="1" VerticalAlignment="Center" Margin="0,5"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Book.ISBN, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
-            <TextBlock Text="Autoren:" Grid.Row="2" VerticalAlignment="Center" Margin="0,5"/>
-            <!--<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Book.AuthorNames, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>-->
+            <TextBlock Text="Autor:" Grid.Row="2" VerticalAlignment="Center" Margin="0,5"/>
+            <ComboBox Grid.Row="2" Grid.Column="1" 
+                      ItemsSource="{Binding Authors}" 
+                      SelectedItem="{Binding Book.Author, Mode=TwoWay}" 
+                      DisplayMemberPath="FullName" 
+                      Margin="5"/>
 
             <TextBlock Text="Genre:" Grid.Row="3" VerticalAlignment="Center" Margin="0,5"/>
-            <!--<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Book.GenreNames, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>-->
+            <ComboBox Grid.Row="3" Grid.Column="1" 
+                      ItemsSource="{Binding Genres}" 
+                      SelectedItem="{Binding Book.Genre, Mode=TwoWay}" 
+                      DisplayMemberPath="Description" 
+                      Margin="5"/>
 
             <TextBlock Text="Veröffentlichung:" Grid.Row="4" VerticalAlignment="Center" Margin="0,5"/>
             <DatePicker Grid.Row="4" Grid.Column="1" SelectedDate="{Binding Book.PublishingDate, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>

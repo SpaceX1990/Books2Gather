@@ -75,8 +75,9 @@ namespace Books2Gather.ViewModels
 
             var dialog = new BookDialog()
             {
-                DataContext = new BookDialogViewModel(bookToEdit, bookRepository)
+                DataContext = new BookDialogViewModel(bookToEdit, bookRepository, authorRepository, genreRepository)
             };
+
 
             if (dialog.ShowDialog() == true)
             {
