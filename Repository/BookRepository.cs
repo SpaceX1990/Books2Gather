@@ -16,8 +16,12 @@ namespace Books2Gather.Repository
 
         public void Delete(Book entity)
         {
-            dbSet.Remove(entity);
-            context.SaveChanges();
+            var existingBook = dbSet.Find(entity.BookId);
+            if (existingBook != null)
+            {
+                dbSet.Remove(existingBook);
+                context.SaveChanges();
+            }
         }
 
         public IEnumerable<Book> GetAll()
@@ -38,9 +42,24 @@ namespace Books2Gather.Repository
 
         public void Insert(Book entity)
         {
+            if (entity.Author != null)
+            {
+                var existingAuthor = context.Authors.SingleOrDefault(a => a.AuthorId == entity.Author.AuthorId);
+                if (existingAuthor == null)
+                {
+                    context.Authors.Add(entity.Author);
+                }
+                else
+                {
+                    context.Authors.Attach(existingAuthor);
+                    entity.Author = existingAuthor;
+                }
+            }
             dbSet.Add(entity);
             context.SaveChanges();
         }
+
+
 
         public void Update(Book entity)
         {
