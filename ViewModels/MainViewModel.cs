@@ -35,6 +35,7 @@ namespace Books2Gather.ViewModels
 
         public MainViewModel() {
             bookRepository = new BookRepository();
+            Books = new ObservableCollection<Book>(bookRepository.GetAll());
             //authorRepository = new AuthorRepository();
             //genreRepository = new GenreRepository();
 
