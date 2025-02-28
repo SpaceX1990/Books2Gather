@@ -2,17 +2,17 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Books2Gather.Models {
-    [Table("Buecher")] 
+    [Table("Books")] 
     public class Book
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("BuchID")] 
+        [Column("BookId")] 
         public int BookId { get; set; }
 
         [Required]
         [MaxLength(255)]
-        [Column("Titel")]
+        [Column("Title")]
         public string Title { get; set; }
 
         [Required]
@@ -20,21 +20,21 @@ namespace Books2Gather.Models {
         [Column("ISBN")]
         public string ISBN { get; set; }
 
-        [Column("Erscheinungsdatum")]
+        [Column("PublishingDate")]
         public DateOnly PublishingDate { get; set; }
 
-        [Column("Preis")]
+        [Column("Prize")]
         public decimal Prize { get; set; }
 
-        [Column("AutorID")]
-        public int Author { get; set; }
+        [Column("AuthorId")]
+        public int AuthorId { get; set; }
 
-        [Column("GenreID")]
-        public int Genre { get; set; }
+        [Column("GenreId")]
+        public int GenreId { get; set; }
 
-        //public List<Author> Authors { get; set; } = new List<Author>();
-        
-        //public List<Genre> Genres { get; set; } = new List<Genre>();
+        public List<Author> Authors { get; set; } = new List<Author>();
+
+        public List<Genre> Genres { get; set; } = new List<Genre>();
 
 
         //public string AuthorNames => string.Join(", ", Authors.Select(a => $"{a.FirstName} {a.LastName}"));

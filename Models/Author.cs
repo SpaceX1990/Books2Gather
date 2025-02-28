@@ -3,23 +3,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Books2Gather.Models
 {
-    [Table("Autoren")] 
+    [Table("Authors")] 
     public class Author
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("AutorID")] 
+        [Column("AuthorId")] 
         public int AuthorId { get; set; }
 
         [Required]
         [MaxLength(50)]
-        [Column("Name")]
-        public string Name { get; set; }
+        [Column("FirstName")]
+        public string FirstName { get; set; }
 
-        //[Required]
-        //[MaxLength(50)]
-        //[Column("Nachname")]
-        //public string LastName { get; set; }
+        [Required]
+        [MaxLength(50)]
+        [Column("LastName")]
+        public string LastName { get; set; }
 
         //[Column("Geburtsdatum")] public DateOnly? BirthDate { get; set; }
 
@@ -34,8 +34,8 @@ namespace Books2Gather.Models
         //{
         //    get { return $"{FirstName} {LastName}"; }
         //}
-        
-        public List<Book> Books { get; set; } = new List<Book>();
+
+        //public List<Book> Books { get; set; } = new List<Book>();
 
     }
 }
