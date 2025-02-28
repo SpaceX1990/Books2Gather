@@ -95,12 +95,13 @@ namespace Books2Gather.ViewModels
             if (item is Book book) {
                 return string.IsNullOrEmpty(SearchQuery) ||
                        book.Title.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                       book.ISBN.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                       book.Authors.Any(a =>
-                           a.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                           a.LastName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                           $"{a.FirstName} {a.LastName}".Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
-                       book.Genres.Any(g => g.Description.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
+                       book.ISBN.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase);
+                       //||
+                       //book.Authors.Any(a =>
+                       //    a.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                       //    a.LastName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                       //    $"{a.FirstName} {a.LastName}".Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                       //book.Genres.Any(g => g.Description.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase));
             }
             return false;
         }
@@ -110,8 +111,8 @@ namespace Books2Gather.ViewModels
             var bookToEdit = isNew ? new Book() : new Book {
                 Title = book.Title,
                 ISBN = book.ISBN,
-                Authors = new List<Author>(book.Authors),
-                Genres = new List<Genre>(book.Genres),
+                //Authors = new List<Author>(book.Authors),
+                //Genres = new List<Genre>(book.Genres),
                 PublishingDate = book.PublishingDate,
                 Prize = book.Prize
             };
@@ -149,8 +150,8 @@ namespace Books2Gather.ViewModels
                 MessageBoxImage.Warning);
 
             if (result == MessageBoxResult.Yes) {
-                //Books.Remove(book);
                 bookRepository.Delete(book);
+                Books.Remove(book);
             }
         }
 

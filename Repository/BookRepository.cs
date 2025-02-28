@@ -16,9 +16,14 @@ namespace Books2Gather.Repository {
             context.SaveChanges();
         }
 
-        public IEnumerable<Book> GetAll() {
-            return dbSet.ToList();
+        public IEnumerable<Book> GetAll()
+        {
+            return dbSet
+                .Include(b => b.Authors)  // Lädt die Autoren mit
+                .Include(b => b.Genres)   // Lädt die Genres mit
+                .ToList();
         }
+
 
         public Book? GetById(int id) {
             return dbSet.Find(id);

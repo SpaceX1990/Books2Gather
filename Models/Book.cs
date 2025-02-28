@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Books2Gather.Models {
-    [Table("Books")] 
+namespace Books2Gather.Models
+{
+    [Table("Books")]
     public class Book
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("BookId")] 
+        [Column("BookId")]
         public int BookId { get; set; }
 
         [Required]
@@ -26,18 +27,16 @@ namespace Books2Gather.Models {
         [Column("Prize")]
         public decimal Prize { get; set; }
 
+        [ForeignKey("Author")]
         [Column("AuthorId")]
         public int AuthorId { get; set; }
 
+        public Author Author { get; set; }
+
+        [ForeignKey("Genre")]
         [Column("GenreId")]
         public int GenreId { get; set; }
 
-        public List<Author> Authors { get; set; } = new List<Author>();
-
-        public List<Genre> Genres { get; set; } = new List<Genre>();
-
-
-        //public string AuthorNames => string.Join(", ", Authors.Select(a => $"{a.FirstName} {a.LastName}"));
-        //public string GenreNames => string.Join(", ", Genres.Select(g => g.Description));
+        public Genre Genre { get; set; }
     }
 }
