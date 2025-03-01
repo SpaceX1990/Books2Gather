@@ -8,7 +8,7 @@ namespace Books2Gather.Models {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("BookId")] 
-        public int BookId { get; set; }
+        public int? BookId { get; set; }
 
         [Required]
         [MaxLength(255)]
@@ -31,17 +31,10 @@ namespace Books2Gather.Models {
         public Genre Genre { get; set; }
 
         [Column("AuthorId")]
-        public int AuthorId { get; set; }
+        public int? AuthorId { get; set; }
 
         [Column("GenreId")]
-        public int GenreId { get; set; }
+        public int? GenreId { get; set; }
 
-        //public List<Author> Authors { get; set; } = new List<Author>();
-
-        //public List<Genre> Genres { get; set; } = new List<Genre>();
-
-
-        //public string AuthorNames => string.Join(", ", Authors.Select(a => $"{a.FirstName} {a.LastName}"));
-        //public string GenreNames => string.Join(", ", Genres.Select(g => g.Description));
     }
 }

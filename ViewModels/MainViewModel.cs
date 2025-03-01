@@ -1,12 +1,13 @@
 ﻿using Books2Gather.Models;
+using Books2Gather.Repository;
 using Books2Gather.Views;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Books2Gather.Repository;
 
 namespace Books2Gather.ViewModels
 {
@@ -20,9 +21,11 @@ namespace Books2Gather.ViewModels
         public ICollectionView FilteredBooks { get; }
 
         private string _searchQuery;
-        public string SearchQuery {
+        public string SearchQuery
+        {
             get => _searchQuery;
-            set {
+            set
+            {
                 _searchQuery = value;
                 OnPropertyChanged(nameof(SearchQuery));
                 FilteredBooks.Refresh();
@@ -33,15 +36,21 @@ namespace Books2Gather.ViewModels
         public ICommand EditBookCommand { get; }
         public ICommand DeleteBookCommand { get; }
 
-        public MainViewModel() {
+        public MainViewModel()
+        {
+            CultureInfo culture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
             bookRepository = new BookRepository();
             authorRepository = new AuthorRepository();
             genreRepository = new GenreRepository();
 
             Books = new ObservableCollection<Book>(bookRepository.GetAll());
-            foreach (Book book in Books) {
-                book.Author = authorRepository.GetById(book.AuthorId);
-                book.Genre = genreRepository.GetById(book.GenreId);
+            foreach (Book book in Books)
+            {
+                book.Author = authorRepository.GetById((int)book.AuthorId);
+                book.Genre = genreRepository.GetById((int)book.GenreId);
             }
 
             FilteredBooks = CollectionViewSource.GetDefaultView(Books);
@@ -52,26 +61,29 @@ namespace Books2Gather.ViewModels
             DeleteBookCommand = new RelayCommand<Book>(DeleteBook);
         }
 
-        private bool FilterBooks(object item) {
-            if (item is Book book) {
+        private bool FilterBooks(object item)
+        {
+            if (item is Book book)
+            {
+                var culture = CultureInfo.CurrentCulture;
                 return string.IsNullOrEmpty(SearchQuery) ||
                        book.Title.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                        book.ISBN.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                        book.Author.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                        book.Author.LastName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                        book.Genre.Description.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                       book.PublishingDate.ToString().Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                       book.Prize.ToString().Contains(SearchQuery, StringComparison.OrdinalIgnoreCase);
+                       book.PublishingDate.ToString("d", culture).Contains(SearchQuery) ||
+                       book.Prize.ToString("N2", culture).Contains(SearchQuery);
             }
             return false;
         }
 
-        private void OpenBookDialog(Book book) {
-            //book.Author = authorRepository.GetById(book.AuthorId);
-            //book.Genre = genreRepository.GetById(book.GenreId);
+        private void OpenBookDialog(Book book)
+        {
 
             var isNew = book == null;
-            var bookToEdit = isNew ? new Book() : new Book {
+            var bookToEdit = isNew ? new Book() : new Book
+            {
                 Title = book.Title,
                 ISBN = book.ISBN,
                 Author = book.Author,
@@ -80,48 +92,54 @@ namespace Books2Gather.ViewModels
                 Prize = book.Prize
             };
 
-            var dialog = new BookDialog() {
+            var dialog = new BookDialog()
+            {
                 DataContext = new BookDialogViewModel(bookToEdit)
             };
 
-            if (dialog.ShowDialog() == true) {
-                if (isNew) {
+            if (dialog.ShowDialog() == true)
+            {
+                if (isNew)
+                {
                     Books.Add(bookToEdit);
+                    bookRepository.Insert(bookToEdit);
                 }
-                else {
+                else
+                {
                     var index = Books.IndexOf(book);
-                    if (index >= 0) {
+                    if (index >= 0)
+                    {
                         Books[index] = bookToEdit;
+                        bookRepository.Update(bookToEdit);
                     }
                 }
+                FilteredBooks.Refresh();
             }
         }
 
-        private void AddBook() {
-
-        }
-
-        private void DeleteBook(Book book) {
-            var books = bookRepository.GetAll();
+        private void DeleteBook(Book book)
+        {
             if (book == null)
                 return;
 
             var result = MessageBox.Show(
-                $"Soll das Buch \"{book.Title}\" wirklich gelöscht werden?",
-                "Löschen bestätigen",
+                $"Are you sure you want to delete the book \"{book.Title}\"?",
+                "Confirm Deletion",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
 
-            if (result == MessageBoxResult.Yes) {
+            if (result == MessageBoxResult.Yes)
+            {
                 Books.Remove(book);
                 bookRepository.Delete(book);
+                FilteredBooks.Refresh();
             }
         }
 
-
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged(string propertyName) {
+        protected void OnPropertyChanged(string propertyName)
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
