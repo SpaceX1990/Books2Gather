@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Books2Gather.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250228102615_Buecherei")]
+    [Migration("20250301093558_Buecherei")]
     partial class Buecherei
     {
         /// <inheritdoc />
@@ -34,9 +34,6 @@ namespace Books2Gather.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorId"));
 
-                    b.Property<int?>("BookId")
-                        .HasColumnType("int");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -51,9 +48,7 @@ namespace Books2Gather.Migrations
 
                     b.HasKey("AuthorId");
 
-                    b.HasIndex("BookId");
-
-                    b.ToTable("Autoren");
+                    b.ToTable("Authors");
 
                     b.HasData(
                         new
@@ -109,6 +104,10 @@ namespace Books2Gather.Migrations
 
                     b.HasKey("BookId");
 
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("GenreId");
+
                     b.ToTable("Books");
 
                     b.HasData(
@@ -153,9 +152,6 @@ namespace Books2Gather.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenreId"));
 
-                    b.Property<int?>("BookId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -163,8 +159,6 @@ namespace Books2Gather.Migrations
                         .HasColumnName("Description");
 
                     b.HasKey("GenreId");
-
-                    b.HasIndex("BookId");
 
                     b.ToTable("Genres");
 
@@ -181,25 +175,23 @@ namespace Books2Gather.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Books2Gather.Models.Author", b =>
-                {
-                    b.HasOne("Books2Gather.Models.Book", null)
-                        .WithMany("Authors")
-                        .HasForeignKey("BookId");
-                });
-
-            modelBuilder.Entity("Books2Gather.Models.Genre", b =>
-                {
-                    b.HasOne("Books2Gather.Models.Book", null)
-                        .WithMany("Genres")
-                        .HasForeignKey("BookId");
-                });
-
             modelBuilder.Entity("Books2Gather.Models.Book", b =>
                 {
-                    b.Navigation("Authors");
+                    b.HasOne("Books2Gather.Models.Author", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Genres");
+                    b.HasOne("Books2Gather.Models.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Genre");
                 });
 #pragma warning restore 612, 618
         }
