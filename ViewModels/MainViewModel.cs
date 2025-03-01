@@ -36,15 +36,15 @@ namespace Books2Gather.ViewModels
         public ICommand EditBookCommand { get; }
         public ICommand DeleteBookCommand { get; }
 
-        public MainViewModel()
+        public MainViewModel(IRepository<Book> bookRepo, IRepository<Author> authorRepo, IRepository<Genre> genreRepo)
         {
+            bookRepository = bookRepo;
+            authorRepository = authorRepo;
+            genreRepository = genreRepo;
+
             CultureInfo culture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
-
-            bookRepository = new BookRepository();
-            authorRepository = new AuthorRepository();
-            genreRepository = new GenreRepository();
 
             Books = new ObservableCollection<Book>(bookRepository.GetAll());
             foreach (Book book in Books)
