@@ -31,50 +31,19 @@ namespace Books2Gather.ViewModels
 
         private void Save()
         {
-            if (Book.Author == null)
-                Book.Author = new Author();
+            Validation();
 
-            if (Book.Genre == null)
-                Book.Genre = new Genre();
+            CheckAuthor();
 
-            Book.Title = Book.Title?.Trim();
-            Book.ISBN = Book.ISBN?.Trim();
-            Book.Author.FirstName = Book.Author.FirstName?.Trim();
-            Book.Author.LastName = Book.Author.LastName?.Trim();
-            Book.Genre.Description = Book.Genre.Description?.Trim();
+            CheckGenre();
 
-            if (Book.PublishingDate == default)
-                Book.PublishingDate = DateOnly.FromDateTime(DateTime.Today);
+            _bookRepository.Update(Book);
 
-            if (Book.Prize <= 0)
-                Book.Prize = 0.01m;
+            CloseDialog(true);
+        }
 
-            // Validierung
-            if (string.IsNullOrWhiteSpace(Book.Title) ||
-                string.IsNullOrWhiteSpace(Book.ISBN) ||
-                string.IsNullOrWhiteSpace(Book.Author.FirstName) ||
-                string.IsNullOrWhiteSpace(Book.Author.LastName) ||
-                string.IsNullOrWhiteSpace(Book.Genre.Description) ||
-                Book.PublishingDate == default ||
-                Book.Prize <= 0)
-            {
-                MessageBox.Show("Please fill in all fields correctly.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            var existingAuthor = _authorRepository.GetAll()
-                .FirstOrDefault(a => a.FirstName == Book.Author.FirstName && a.LastName == Book.Author.LastName);
-
-            if (existingAuthor != null)
-            {
-                Book.AuthorId = existingAuthor.AuthorId;
-                Book.Author = existingAuthor;
-            }
-            else
-            {
-                _authorRepository.Insert(Book.Author);
-            }
-
+        private void CheckGenre()
+        {
             var existingGenre = _genreRepository.GetAll()
                 .FirstOrDefault(g => g.Description == Book.Genre.Description);
 
@@ -85,19 +54,49 @@ namespace Books2Gather.ViewModels
             }
             else
             {
+                Book.Genre.GenreId = null;
+                Book.GenreId = null;
                 _genreRepository.Insert(Book.Genre);
             }
 
-            if (Book.BookId == 0)
+            Book.Genre = _genreRepository.GetById((int)Book.Genre.GenreId);
+            Book.GenreId = Book.Genre.GenreId;
+        }
+
+        private void CheckAuthor()
+        {
+            var existingAuthor = _authorRepository.GetAll()
+                .FirstOrDefault(a => a.FirstName == Book.Author.FirstName && a.LastName == Book.Author.LastName);
+
+            if (existingAuthor != null)
             {
-                _bookRepository.Insert(Book);
+                Book.AuthorId = existingAuthor.AuthorId;
+                Book.Author = existingAuthor;
             }
             else
             {
-                _bookRepository.Update(Book);
+                Book.Author.AuthorId = null;
+                Book.AuthorId = null;
+                _authorRepository.Insert(Book.Author);
             }
 
-            CloseDialog(true);
+            Book.Author = _authorRepository.GetById((int)Book.Author.AuthorId);
+            Book.AuthorId = Book.Author.AuthorId;
+        }
+
+        private void Validation()
+        {
+            if (string.IsNullOrWhiteSpace(Book.Title) ||
+                string.IsNullOrWhiteSpace(Book.ISBN) ||
+                string.IsNullOrWhiteSpace(Book.Author.FirstName) ||
+                string.IsNullOrWhiteSpace(Book.Author.LastName) ||
+                string.IsNullOrWhiteSpace(Book.Genre.Description) ||
+                //Book.PublishingDate == default ||
+                Book.Prize <= 0)
+            {
+                MessageBox.Show("Please fill in all fields correctly.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
         }
 
         private void Cancel()

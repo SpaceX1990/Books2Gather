@@ -13,12 +13,12 @@ namespace Books2Gather.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly IRepository<Book> bookRepository;
-        private readonly IRepository<Author> authorRepository;
-        private readonly IRepository<Genre> genreRepository;
+        private readonly IRepository<Book> _bookRepository;
+        private readonly IRepository<Author> _authorRepository;
+        private readonly IRepository<Genre> _genreRepository;
 
         public ObservableCollection<Book> Books { get; set; }
-        public ICollectionView FilteredBooks { get; }
+        public ICollectionView FilteredBooks { get; set; }
 
         private string _searchQuery;
         public string SearchQuery
@@ -38,27 +38,33 @@ namespace Books2Gather.ViewModels
 
         public MainViewModel(IRepository<Book> bookRepo, IRepository<Author> authorRepo, IRepository<Genre> genreRepo)
         {
-            bookRepository = bookRepo;
-            authorRepository = authorRepo;
-            genreRepository = genreRepo;
+            _bookRepository = bookRepo;
+            _authorRepository = authorRepo;
+            _genreRepository = genreRepo;
 
             CultureInfo culture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
 
-            Books = new ObservableCollection<Book>(bookRepository.GetAll());
+            LoadBooks();
+
+            AddBookCommand = new RelayCommand(AddBookDialog);
+            EditBookCommand = new RelayCommand<Book>(UpdateBookDialog);
+            DeleteBookCommand = new RelayCommand<Book>(DeleteBook);
+        }
+
+        private void LoadBooks()
+        {
+            Books = new ObservableCollection<Book>(_bookRepository.GetAll());
             foreach (Book book in Books)
             {
-                book.Author = authorRepository.GetById((int)book.AuthorId);
-                book.Genre = genreRepository.GetById((int)book.GenreId);
+                book.Author = _authorRepository.GetById((int)book.AuthorId);
+                book.Genre = _genreRepository.GetById((int)book.GenreId);
             }
 
             FilteredBooks = CollectionViewSource.GetDefaultView(Books);
             FilteredBooks.Filter = FilterBooks;
-
-            AddBookCommand = new RelayCommand(() => OpenBookDialog(null));
-            EditBookCommand = new RelayCommand<Book>(OpenBookDialog);
-            DeleteBookCommand = new RelayCommand<Book>(DeleteBook);
+            FilteredBooks.Refresh();
         }
 
         private bool FilterBooks(object item)
@@ -78,42 +84,37 @@ namespace Books2Gather.ViewModels
             return false;
         }
 
-        private void OpenBookDialog(Book book)
+        private void AddBookDialog()
         {
-
-            var isNew = book == null;
-            var bookToEdit = isNew ? new Book() : new Book
-            {
-                Title = book.Title,
-                ISBN = book.ISBN,
-                Author = book.Author,
-                Genre = book.Genre,
-                PublishingDate = book.PublishingDate,
-                Prize = book.Prize
-            };
-
             var dialog = new BookDialog()
             {
-                DataContext = new BookDialogViewModel(bookToEdit)
+                DataContext = new BookDialogViewModel(null)
             };
 
             if (dialog.ShowDialog() == true)
             {
-                if (isNew)
+                LoadBooks();
+            }
+        }
+
+        private void UpdateBookDialog(Book book)
+        {
+            Book? bookToEdit;
+            var isNew = book == null;
+
+            if (!isNew)
+            {
+                bookToEdit = book;
+
+                var dialog = new BookDialog()
                 {
-                    Books.Add(bookToEdit);
-                    bookRepository.Insert(bookToEdit);
-                }
-                else
+                    DataContext = new BookDialogViewModel(bookToEdit)
+                };
+
+                if (dialog.ShowDialog() == true)
                 {
-                    var index = Books.IndexOf(book);
-                    if (index >= 0)
-                    {
-                        Books[index] = bookToEdit;
-                        bookRepository.Update(bookToEdit);
-                    }
+                    LoadBooks();
                 }
-                FilteredBooks.Refresh();
             }
         }
 
@@ -131,7 +132,7 @@ namespace Books2Gather.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 Books.Remove(book);
-                bookRepository.Delete(book);
+                _bookRepository.Delete(book);
                 FilteredBooks.Refresh();
             }
         }
