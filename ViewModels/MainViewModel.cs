@@ -86,35 +86,28 @@ namespace Books2Gather.ViewModels
 
         private void AddBookDialog()
         {
+            Book book = null;
             var dialog = new BookDialog()
             {
-                DataContext = new BookDialogViewModel(null)
+                DataContext = new BookDialogViewModel(book)
             };
-
+            
             if (dialog.ShowDialog() == true)
             {
-                LoadBooks();
+
             }
         }
 
         private void UpdateBookDialog(Book book)
         {
-            Book? bookToEdit;
-            var isNew = book == null;
-
-            if (!isNew)
+            var dialog = new BookDialog()
             {
-                bookToEdit = book;
+                DataContext = new BookDialogViewModel(book)
+            };
 
-                var dialog = new BookDialog()
-                {
-                    DataContext = new BookDialogViewModel(bookToEdit)
-                };
+            if (dialog.ShowDialog() == true)
+            {
 
-                if (dialog.ShowDialog() == true)
-                {
-                    LoadBooks();
-                }
             }
         }
 
