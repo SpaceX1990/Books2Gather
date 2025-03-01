@@ -50,8 +50,8 @@ namespace Books2Gather.Migrations
                     ISBN = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     PublishingDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Prize = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AuthorId = table.Column<int>(type: "int", nullable: false),
-                    GenreId = table.Column<int>(type: "int", nullable: false)
+                    AuthorId = table.Column<int>(type: "int", nullable: true),
+                    GenreId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -60,14 +60,12 @@ namespace Books2Gather.Migrations
                         name: "FK_Books_Authors_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Authors",
-                        principalColumn: "AuthorId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AuthorId");
                     table.ForeignKey(
                         name: "FK_Books_Genres_GenreId",
                         column: x => x.GenreId,
                         principalTable: "Genres",
-                        principalColumn: "GenreId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "GenreId");
                 });
 
             migrationBuilder.InsertData(

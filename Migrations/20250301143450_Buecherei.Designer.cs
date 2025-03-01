@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Books2Gather.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250301114710_Buecherei V2")]
-    partial class BuechereiV2
+    [Migration("20250301143450_Buecherei")]
+    partial class Buecherei
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
