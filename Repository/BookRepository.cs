@@ -25,11 +25,6 @@ namespace Books2Gather.Repository {
         }
 
         public void Insert(Book entity) {
-            entity.AuthorId = null;
-            entity.GenreId = null;
-            entity.Author.AuthorId = null;
-            entity.Genre.GenreId = null;
-            entity.BookId = null;
             dbSet.Add(entity);
             context.SaveChanges();
         }
