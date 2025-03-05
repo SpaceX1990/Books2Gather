@@ -25,7 +25,8 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
                 <DataGridTextColumn Header="ISBN" Binding="{Binding ISBN}" Width="150"/>
-                <DataGridTextColumn Header="Author" Binding="{Binding Author.FirstName}" Width="200"/>
+                <DataGridTextColumn Header="Author Firstname" Binding="{Binding Author.FirstName}" Width="200"/>
+                <DataGridTextColumn Header="Author Lastname" Binding="{Binding Author.LastName}" />
                 <DataGridTextColumn Header="Publishing Date" Binding="{Binding PublishingDate, StringFormat=MM/dd/yyyy}" Width="150"/>
                 <DataGridTextColumn Header="Genre" Binding="{Binding Genre.Description}" Width="150"/>
                 <DataGridTextColumn Header="Price ($)" Binding="{Binding Prize, StringFormat=N2}" Width="100"/>
