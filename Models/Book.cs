@@ -21,7 +21,7 @@ namespace Books2Gather.Models {
         public string ISBN { get; set; }
 
         [Column("PublishingDate")]
-        public DateOnly PublishingDate { get; set; }
+        public DateTime PublishingDate { get; set; }
 
         [Column("Prize")]
         public decimal Prize { get; set; }

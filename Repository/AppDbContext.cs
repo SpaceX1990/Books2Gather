@@ -18,9 +18,9 @@ namespace Books2Gather.Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Book>().HasData(
-                new Book { BookId = 1, Title = "Der Herr der Ringe", ISBN = "978-3-608-93000-1", PublishingDate = new DateOnly(1954, 7, 29), Prize = 29.99m, AuthorId = 1, GenreId = 1 },
-                new Book { BookId = 2, Title = "Harry Potter und der Stein der Weisen", ISBN = "978-3-551-55118-4", PublishingDate = new DateOnly(1997, 6, 26), Prize = 24.99m, AuthorId = 2, GenreId = 2 },
-                new Book { BookId = 3, Title = "Der Hobbit", ISBN = "978-3-608-93000-1", PublishingDate = new DateOnly(1937, 9, 21), Prize = 19.99m, AuthorId = 1, GenreId = 1 }
+                new Book { BookId = 1, Title = "Der Herr der Ringe", ISBN = "978-3-608-93000-1", PublishingDate = new DateTime(1954, 7, 29), Prize = 29.99m, AuthorId = 1, GenreId = 1 },
+                new Book { BookId = 2, Title = "Harry Potter und der Stein der Weisen", ISBN = "978-3-551-55118-4", PublishingDate = new DateTime(1997, 6, 26), Prize = 24.99m, AuthorId = 2, GenreId = 2 },
+                new Book { BookId = 3, Title = "Der Hobbit", ISBN = "978-3-608-93000-1", PublishingDate = new DateTime(1937, 9, 21), Prize = 19.99m, AuthorId = 1, GenreId = 1 }
             );
             modelBuilder.Entity<Author>().HasData(
                 new Author { AuthorId = 1, FirstName = "George R. R.", LastName = "Martin" },

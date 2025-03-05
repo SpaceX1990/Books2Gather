@@ -18,27 +18,42 @@ namespace Books2Gather.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
+        private DateTime _publishingDate;
+        public DateTime PublishingDate
+        {
+            get => _publishingDate;
+            set
+            {
+                if (_publishingDate != value)
+                {
+                    _publishingDate = value;
+                    OnPropertyChanged(nameof(PublishingDate));
+                }
+            }
+        }
+
         public BookDialogViewModel(Book book)
         {
             Book = book ?? new Book();
             Book.Author ??= new Author();
             Book.Genre ??= new Genre();
 
+            PublishingDate = book.PublishingDate != default ? book.PublishingDate : DateTime.Today;
+
             SaveCommand = new RelayCommand(Save);
             CancelCommand = new RelayCommand(Cancel);
         }
-
 
         private void Save()
         {
             Validation();
 
             CheckAuthor();
-
             CheckGenre();
 
-            _bookRepository.Update(Book);
+            Book.PublishingDate = PublishingDate;
 
+            _bookRepository.Update(Book);
             CloseDialog(true);
         }
 
@@ -91,7 +106,7 @@ namespace Books2Gather.ViewModels
                 string.IsNullOrWhiteSpace(Book.Author.FirstName) ||
                 string.IsNullOrWhiteSpace(Book.Author.LastName) ||
                 string.IsNullOrWhiteSpace(Book.Genre.Description) ||
-                //Book.PublishingDate == default ||
+                PublishingDate == default ||
                 Book.Prize <= 0)
             {
                 MessageBox.Show("Please fill in all fields correctly.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
