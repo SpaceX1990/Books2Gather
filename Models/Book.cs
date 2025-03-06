@@ -36,5 +36,8 @@ namespace Books2Gather.Models {
         [Column("GenreId")]
         public int? GenreId { get; set; }
 
+        public string FullName => Author != null ? $"{Author.FirstName} {Author.LastName}".Trim() : "Unbekannter Autor";
+
+
     }
 }

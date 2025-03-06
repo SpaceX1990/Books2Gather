@@ -42,7 +42,7 @@ namespace Books2Gather.ViewModels
             _authorRepository = authorRepo;
             _genreRepository = genreRepo;
 
-            CultureInfo culture = new CultureInfo("en-US");
+            CultureInfo culture = new CultureInfo("de-DE");
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
 
@@ -71,15 +71,14 @@ namespace Books2Gather.ViewModels
         {
             if (item is Book book)
             {
-                var culture = CultureInfo.CurrentCulture;
                 return string.IsNullOrEmpty(SearchQuery) ||
                        book.Title.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                        book.ISBN.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                       book.Author.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                       book.Author.LastName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                       book.Genre.Description.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                       book.PublishingDate.ToString("d", culture).Contains(SearchQuery) ||
-                       book.Prize.ToString("N2", culture).Contains(SearchQuery);
+                       (book.Author?.FirstName?.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                       (book.Author?.LastName?.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                       (book.Genre?.Description?.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                       book.PublishingDate.ToString("d", CultureInfo.CurrentCulture).Contains(SearchQuery) ||
+                       book.Prize.ToString("N2", CultureInfo.CurrentCulture).Contains(SearchQuery);
             }
             return false;
         }

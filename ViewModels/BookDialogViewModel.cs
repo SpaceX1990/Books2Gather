@@ -32,13 +32,22 @@ namespace Books2Gather.ViewModels
             }
         }
 
+
         public BookDialogViewModel(Book book)
         {
             Book = book ?? new Book();
             Book.Author ??= new Author();
             Book.Genre ??= new Genre();
 
-            PublishingDate = book.PublishingDate != default ? book.PublishingDate : DateTime.Today;
+            if (book.PublishingDate == default || book.PublishingDate.Year < 100)
+            {
+                PublishingDate = DateTime.Today;
+            }
+            else
+            {
+                PublishingDate = book.PublishingDate;
+            }
+
 
             SaveCommand = new RelayCommand(Save);
             CancelCommand = new RelayCommand(Cancel);
@@ -109,7 +118,7 @@ namespace Books2Gather.ViewModels
                 PublishingDate == default ||
                 Book.Prize <= 0)
             {
-                MessageBox.Show("Please fill in all fields correctly.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Fehler beim Ausfüllen.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
         }
