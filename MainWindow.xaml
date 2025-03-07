@@ -12,15 +12,9 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <TextBox x:Name="SearchBox"
-                     Width="350" Height="35" Padding="6"
-                     Foreground="Gray"
-                     Text="🔍 Suche..."
-                     GotFocus="SearchBox_GotFocus"
-                     LostFocus="SearchBox_LostFocus"
-                     Background="White"
-                     BorderBrush="Gray"
-                     BorderThickness="1"
+            <TextBox Width="350" Height="35" Padding="6"
+                     Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                     Background="White" BorderBrush="Gray" BorderThickness="1"
                      FontSize="14"/>
 
             <Button Content="Neues Buch hinzufügen" Width="220" Height="35" Padding="6"
