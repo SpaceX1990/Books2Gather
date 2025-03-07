@@ -20,6 +20,7 @@ namespace Books2Gather.ViewModels
         public ICommand CancelCommand { get; }
 
         private DateTime _publishingDate;
+
         public DateTime PublishingDate
         {
             get => _publishingDate;
@@ -50,14 +51,14 @@ namespace Books2Gather.ViewModels
             }
 
 
-
             SaveCommand = new RelayCommand(Save);
             CancelCommand = new RelayCommand(Cancel);
         }
 
         private void Save()
         {
-            Validation();
+            if (!Validation())
+                return;
 
             CheckAuthor();
             CheckGenre();
@@ -110,7 +111,7 @@ namespace Books2Gather.ViewModels
             Book.AuthorId = Book.Author.AuthorId;
         }
 
-        private void Validation()
+        private bool Validation()
         {
             if (string.IsNullOrWhiteSpace(Book.Title) ||
                 string.IsNullOrWhiteSpace(Book.ISBN) ||
@@ -120,9 +121,14 @@ namespace Books2Gather.ViewModels
                 PublishingDate == default ||
                 Book.Prize <= 0)
             {
-                MessageBox.Show("Fehler beim Ausfüllen.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                MessageBox.Show("Fehler beim Ausfüllen. Bitte alle Felder korrekt ausfüllen.",
+                    "Validierungsfehler",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return false;
             }
+
+            return true;
         }
 
         private void Cancel()
@@ -144,6 +150,7 @@ namespace Books2Gather.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
