@@ -53,15 +53,17 @@ namespace Books2Gather.ViewModels
             DeleteBookCommand = new RelayCommand<Book>(DeleteBook);
         }
 
-        private void LoadBooks()
-        {
+        private void LoadBooks() {
             Books = new ObservableCollection<Book>(_bookRepository.GetAll());
-            foreach (Book book in Books)
-            {
+            foreach (Book book in Books) {
                 book.Author = _authorRepository.GetById((int)book.AuthorId);
                 book.Genre = _genreRepository.GetById((int)book.GenreId);
             }
 
+            FilterBooks();
+        }
+
+        private void FilterBooks() {
             FilteredBooks = CollectionViewSource.GetDefaultView(Books);
             FilteredBooks.Filter = FilterBooks;
             FilteredBooks.Refresh();
@@ -112,7 +114,7 @@ namespace Books2Gather.ViewModels
 
             if (dialog.ShowDialog() == true)
             {
-
+                FilterBooks();
             }
         }
 
