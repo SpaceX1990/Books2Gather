@@ -124,8 +124,8 @@ namespace Books2Gather.ViewModels
                 return;
 
             var result = MessageBox.Show(
-                $"Are you sure you want to delete the book \"{book.Title}\"?",
-                "Confirm Deletion",
+                $"Wollen Sie das Buch {book.Title} wirklich löschen?",
+                "Löschen bestätigen",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
 

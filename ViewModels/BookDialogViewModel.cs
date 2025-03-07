@@ -1,4 +1,5 @@
 ﻿using Books2Gather.Models;
+using Books2Gather.Models;
 using Books2Gather.Repository;
 using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel;
@@ -47,6 +48,7 @@ namespace Books2Gather.ViewModels
             {
                 PublishingDate = book.PublishingDate;
             }
+
 
 
             SaveCommand = new RelayCommand(Save);
