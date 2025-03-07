@@ -60,10 +60,10 @@ namespace Books2Gather.ViewModels
                 book.Genre = _genreRepository.GetById((int)book.GenreId);
             }
 
-            FilterBooks();
+            RefreshBooks();
         }
 
-        private void FilterBooks() {
+        private void RefreshBooks() {
             FilteredBooks = CollectionViewSource.GetDefaultView(Books);
             FilteredBooks.Filter = FilterBooks;
             FilteredBooks.Refresh();
@@ -114,7 +114,7 @@ namespace Books2Gather.ViewModels
 
             if (dialog.ShowDialog() == true)
             {
-                FilterBooks();
+                RefreshBooks();
             }
         }
 
