@@ -98,18 +98,30 @@ namespace Books2Gather.ViewModels
             if (existingAuthor != null)
             {
                 Book.AuthorId = existingAuthor.AuthorId;
-                Book.Author = existingAuthor;
+                Book.Author = new Author
+                {
+                    AuthorId = existingAuthor.AuthorId,
+                    FirstName = existingAuthor.FirstName,
+                    LastName = existingAuthor.LastName
+                };
             }
             else
             {
                 Book.Author.AuthorId = null;
                 Book.AuthorId = null;
                 _authorRepository.Insert(Book.Author);
-            }
 
-            Book.Author = _authorRepository.GetById((int)Book.Author.AuthorId);
-            Book.AuthorId = Book.Author.AuthorId;
+                Book.Author = _authorRepository.GetAll()
+                    .FirstOrDefault(a => a.FirstName == Book.Author.FirstName && a.LastName == Book.Author.LastName);
+
+                if (Book.Author != null)
+                {
+                    Book.AuthorId = Book.Author.AuthorId;
+                }
+            }
         }
+
+
 
         private bool Validation()
         {
